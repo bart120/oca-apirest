@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -34,13 +36,22 @@ public class OffersController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/offers/byname/{name}")
-    public ResponseEntity<Offer> getOfferByName(@PathVariable("name") String name) {
+    @GetMapping("/offers/byname")
+    public ResponseEntity<Offer> getOfferByName(@RequestParam String name) {
         List<Offer> list = Offer.getAllOffers();
         Offer of = list.stream().filter(x -> x.getName().equals(name)).findFirst().orElse(null);
         if (of != null)
             return new ResponseEntity<>(of, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/offers")
+    public ResponseEntity<Offer> addOffer(@RequestBody Offer offer) {
+        if (offer.getName().equals(""))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<Offer> list = Offer.getAllOffers();
+        list.add(offer);
+        return new ResponseEntity<>(offer, HttpStatus.CREATED);
     }
 }

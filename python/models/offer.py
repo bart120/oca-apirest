@@ -1,8 +1,7 @@
-class Offer:
-    id = 0
-    name=""
+from pydantic import BaseModel
 
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
+class Offer(BaseModel):
+    name:str =""
+    id:int=0
+    
         
