@@ -3,9 +3,10 @@ from models.offer import Offer
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from typing import List
+from database import SessionLocal
 
 app = FastAPI()
-
+db=SessionLocal()
 origins = [
     "http://localhost:8000",
     "http://localhost"

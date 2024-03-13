@@ -3,10 +3,12 @@ package com.orange.api.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orange.api.models.Offer;
+import com.orange.api.repositories.OffersRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,38 +22,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class OffersController {
 
+    @Autowired
+    OffersRepository offerRepo;
+
     @GetMapping("/offers")
     public List<Offer> getOffers() {
-        List<Offer> list = Offer.getAllOffers();
+        // List<Offer> list = Offer.getAllOffers();
+        List<Offer> list = offerRepo.findAll();
         return list;
     }
 
-    @GetMapping("/offers/{id}")
-    public ResponseEntity<Offer> getOfferById(@PathVariable("id") long idOffer) {
-        List<Offer> list = Offer.getAllOffers();
-        Offer of = list.stream().filter(x -> x.getId() == idOffer).findFirst().orElse(null);
-        if (of != null)
-            return new ResponseEntity<>(of, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/offers/byname")
-    public ResponseEntity<Offer> getOfferByName(@RequestParam String name) {
-        List<Offer> list = Offer.getAllOffers();
-        Offer of = list.stream().filter(x -> x.getName().equals(name)).findFirst().orElse(null);
-        if (of != null)
-            return new ResponseEntity<>(of, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/offers")
-    public ResponseEntity<Offer> addOffer(@RequestBody Offer offer) {
-        if (offer.getName().equals(""))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        List<Offer> list = Offer.getAllOffers();
-        list.add(offer);
-        return new ResponseEntity<>(offer, HttpStatus.CREATED);
-    }
+    /*
+     * @GetMapping("/offers/{id}")
+     * public ResponseEntity<Offer> getOfferById(@PathVariable("id") long idOffer) {
+     * List<Offer> list = Offer.getAllOffers();
+     * Offer of = list.stream().filter(x -> x.getId() ==
+     * idOffer).findFirst().orElse(null);
+     * if (of != null)
+     * return new ResponseEntity<>(of, HttpStatus.OK);
+     * else
+     * return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+     * }
+     * 
+     * @GetMapping("/offers/byname")
+     * public ResponseEntity<Offer> getOfferByName(@RequestParam String name) {
+     * List<Offer> list = Offer.getAllOffers();
+     * Offer of = list.stream().filter(x ->
+     * x.getName().equals(name)).findFirst().orElse(null);
+     * if (of != null)
+     * return new ResponseEntity<>(of, HttpStatus.OK);
+     * else
+     * return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+     * }
+     * 
+     * @PostMapping("/offers")
+     * public ResponseEntity<Offer> addOffer(@RequestBody Offer offer) {
+     * if (offer.getName().equals(""))
+     * return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+     * List<Offer> list = Offer.getAllOffers();
+     * list.add(offer);
+     * return new ResponseEntity<>(offer, HttpStatus.CREATED);
+     * }
+     */
 }
