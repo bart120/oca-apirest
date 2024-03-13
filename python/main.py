@@ -50,3 +50,13 @@ def add_offer(offer:OfferSerializer):
     db.commit()
     #db.rollback()
     return of
+
+@app.put('/offers/{id}', status_code=204)
+def update_offer(id:int, offer:OfferSerializer):
+    of=db.query(Offer).filter(Offer.id==id).first()
+    if of == None:
+        return Response(status_code=404, content="detail:Offer not found")
+    of.name = offer.name
+    db.commit()
+    #db.rollback()
+    return Response(status_code=204)

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -79,6 +80,16 @@ public class OffersController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping("/offers/{id}")
+    public ResponseEntity<Offer> updateOffer(@PathVariable("id") long idOffer, @RequestBody Offer offer) {
+        Optional<Offer> of = offerRepo.findById(idOffer);
+        if (of.isPresent()) {
+            offerRepo.save(offer);
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        } else
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 }
