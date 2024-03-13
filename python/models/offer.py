@@ -12,6 +12,10 @@ class OfferSerializer(BaseModel):
     name:str
     class Config:
         from_attributes=True
+        schema_extra={
+            "title":"Offre",
+            "content":"Shéma d'une offre"
+        }
 
     
         

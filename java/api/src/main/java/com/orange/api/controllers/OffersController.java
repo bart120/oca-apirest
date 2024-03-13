@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.orange.api.models.Offer;
 import com.orange.api.repositories.OffersRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,11 +27,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
+@Tag(name = "Offres", description = "API des offres")
 public class OffersController {
 
     @Autowired
     OffersRepository offerRepo;
 
+    @Operation(summary = "Liste des offres", description = "La liste des offres illimitées")
     @GetMapping("/offers")
     public List<Offer> getOffers() {
         // List<Offer> list = Offer.getAllOffers();
@@ -92,4 +98,13 @@ public class OffersController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("/offers/{id}")
+    public ResponseEntity<Offer> deleteOffer(@PathVariable("id") long idOffer) {
+        try {
+            offerRepo.deleteById(idOffer);
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 }

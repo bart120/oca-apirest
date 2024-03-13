@@ -60,3 +60,12 @@ def update_offer(id:int, offer:OfferSerializer):
     db.commit()
     #db.rollback()
     return Response(status_code=204)
+
+@app.delete('/offers/{id}', status_code=204)
+def delete_offer(id:int):
+    of=db.query(Offer).filter(Offer.id==id).first()
+    if of is None:
+        return Response(status_code=404, content="detail:Offer not found")
+    db.delete(of)
+    db.commit
+    return Response(status_code=204)
